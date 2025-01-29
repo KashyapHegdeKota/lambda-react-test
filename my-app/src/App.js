@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Music2 } from "lucide-react";
 
 export default function App() {
   const [data, setData] = useState(null);
@@ -29,50 +30,63 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md max-w-md w-full">
-        <h1 className="text-xl font-semibold mb-4">Spotify Playlist Tracks</h1>
-
-        <form onSubmit={fetchData} className="mb-4">
-          <div className="flex flex-col space-y-2">
-            <label
-              htmlFor="playlistId"
-              className="text-sm font-medium text-gray-700"
-            >
-              Spotify Playlist ID
-            </label>
-            <input
-              type="text"
-              id="playlistId"
-              value={playlistId}
-              onChange={(e) => setPlaylistId(e.target.value)}
-              placeholder="Enter Spotify playlist ID"
-              className="px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-            <button
-              type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              disabled={loading}
-            >
-              {loading ? "Loading..." : "Get Tracks"}
-            </button>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-700 to-pink-500 p-10 flex items-center justify-center">
+      <div className="max-w-3xl w-full bg-white rounded-3xl shadow-xl p-10">
+        <h1 className="text-4xl font-extrabold text-center text-gray-900 mb-8 flex items-center justify-center space-x-3">
+          <Music2 className="w-8 h-8 text-purple-600" />
+          <span>Spotify Playlist Explorer</span>
+        </h1>
+        <form onSubmit={fetchData} className="mb-8 flex flex-col gap-4">
+          <label
+            htmlFor="playlistId"
+            className="text-lg font-medium text-gray-700"
+          >
+            Enter Playlist ID
+          </label>
+          <input
+            type="text"
+            id="playlistId"
+            value={playlistId}
+            onChange={(e) => setPlaylistId(e.target.value)}
+            placeholder="e.g., 5XYMWtF56rBIs2Kgwd00PX"
+            className="w-full px-5 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-4 focus:ring-purple-400 transition-all shadow-sm"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white px-6 py-3 rounded-lg font-bold text-lg hover:scale-105 transform transition-all disabled:opacity-50 flex justify-center items-center"
+            disabled={loading}
+          >
+            {loading ? "Fetching..." : "Get Playlist Tracks"}
+          </button>
         </form>
 
         {error && (
-          <div className="text-red-500 mb-4 p-3 bg-red-100 rounded">
-            Error: {error}
+          <div className="bg-red-100 border-l-4 border-red-500 p-4 rounded-lg mb-6 text-red-700 font-semibold text-center">
+            ⚠ {error}
           </div>
         )}
 
-        {data && (
+        {data && data.tracks.length > 0 && (
           <div>
-            <h2 className="text-lg font-medium mb-2">Tracks:</h2>
-            <div className="bg-gray-100 p-4 rounded max-h-96 overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900 text-center">
+              🎶 Track List ({data.tracks.length} songs)
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {data.tracks.map((track, index) => (
-                <div key={index} className="mb-1">
-                  {index + 1}. {track}
+                <div
+                  key={index}
+                  className="bg-white rounded-xl shadow-md p-5 flex items-center space-x-4 hover:shadow-lg transition-shadow duration-200 border border-gray-200"
+                >
+                  <div className="w-12 h-12 flex items-center justify-center bg-purple-100 rounded-full">
+                    <Music2 className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <div>
+                    <p className="text-lg font-semibold text-gray-900">
+                      {track}
+                    </p>
+                    <p className="text-sm text-gray-500">Track {index + 1}</p>
+                  </div>
                 </div>
               ))}
             </div>
